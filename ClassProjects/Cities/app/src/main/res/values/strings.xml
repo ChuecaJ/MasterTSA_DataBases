@@ -6,4 +6,8 @@
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="save">Save</string>
+    <string name="all">All</string>
+    <string name="sunny">Sunny</string>
+    <string name="cloudy">Cloudy</string>
+    <string name="sunshineHours">Sunshine Hours</string>
 </resources>

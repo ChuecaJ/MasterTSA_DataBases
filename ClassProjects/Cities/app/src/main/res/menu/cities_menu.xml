@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_all_cities"
+        android:title="@string/all"
+        android:icon="@drawable/ic_all"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_sunny_cities"
+        android:title="@string/sunny"
+        android:icon="@drawable/ic_sun"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_cloudy_cities"
+        android:title="@string/cloudy"
+        android:icon="@drawable/ic_cloud"
+        app:showAsAction="ifRoom"/>
+
+</menu>

@@ -44,8 +44,9 @@ class AddCityFragment: DialogFragment() {
     private fun getData(): City {
         val name = binding.nameEditText.text.toString()
         val description = binding.descriptionEditText.text.toString()
+        val sunshineHours = binding.sunshineHoursEditText.text.toString().toIntOrNull() ?: 0
 
-        return City(id=System.currentTimeMillis().toInt(), name, description)
+        return City(id=System.currentTimeMillis().toInt(), name, description, sunshineHours)
     }
 
 }

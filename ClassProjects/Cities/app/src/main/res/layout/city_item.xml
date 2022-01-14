@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
@@ -17,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            tools:text="Zaragoza"
-            />
+            android:textAlignment="center"
+            tools:text="Zaragoza" />
 
         <TextView
             android:id="@+id/cityDescription"

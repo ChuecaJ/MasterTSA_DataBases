@@ -25,6 +25,13 @@
         android:layout_height="wrap_content"
         android:hint="@string/description" />
 
+    <EditText
+        android:id="@+id/sunshineHoursEditText"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/sunshineHours" />
+
 
     <Button
         android:id="@+id/saveButton"
