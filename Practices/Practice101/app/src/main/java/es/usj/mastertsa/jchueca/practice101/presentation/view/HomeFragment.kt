@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import es.usj.mastertsa.jchueca.practice101.databinding.FragmentHomeBinding
+import es.usj.mastertsa.jchueca.practice101.presentation.viewmodel.HomeState
 import es.usj.mastertsa.jchueca.practice101.presentation.viewmodel.HomeViewModel
 import es.usj.mastertsa.jchueca.practice101.presentation.viewmodel.HomeViewModelFactory
 import kotlinx.coroutines.flow.collect
@@ -23,7 +24,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }

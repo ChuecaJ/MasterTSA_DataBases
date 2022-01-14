@@ -2,12 +2,11 @@ package es.usj.mastertsa.jchueca.practice101.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import es.usj.mastertsa.jchueca.practice101.domain.PracticeData
+import es.usj.mastertsa.jchueca.practice101.domain.model.PracticeData
 import es.usj.mastertsa.jchueca.practice101.domain.usecases.AddPracticeData
 import es.usj.mastertsa.jchueca.practice101.domain.usecases.DeletePracticeData
 import es.usj.mastertsa.jchueca.practice101.domain.usecases.GetPracticeData
 import es.usj.mastertsa.jchueca.practice101.domain.usecases.UpdatePracticeData
-import es.usj.mastertsa.jchueca.practice101.presentation.view.HomeState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

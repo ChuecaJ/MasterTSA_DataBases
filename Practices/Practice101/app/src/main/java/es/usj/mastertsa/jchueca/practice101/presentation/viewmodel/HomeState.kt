@@ -1,6 +1,6 @@
-package es.usj.mastertsa.jchueca.practice101.presentation.view
+package es.usj.mastertsa.jchueca.practice101.presentation.viewmodel
 
-import es.usj.mastertsa.jchueca.practice101.domain.PracticeData
+import es.usj.mastertsa.jchueca.practice101.domain.model.PracticeData
 
 sealed class HomeState {
     object Loading : HomeState()
