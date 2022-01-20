@@ -5,7 +5,7 @@ import es.usj.mastertsa.jchueca.cities.domain.repository.CityRepository
 
 class AddCityUseCase (val repository: CityRepository) {
 
-    fun addCity(city: City){
+    suspend fun addCity(city: City){
         repository.addCity(city)
     }
 }

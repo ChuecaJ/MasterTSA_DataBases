@@ -9,9 +9,12 @@ import es.usj.mastertsa.jchueca.cities.domain.usecases.GetCitiesUseCase
 import es.usj.mastertsa.jchueca.cities.domain.usecases.GetFilterUseCase
 import es.usj.mastertsa.jchueca.cities.domain.usecases.SetFilterUseCase
 import es.usj.mastertsa.jchueca.cities.presentation.viewmodel.CityState.Loading
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -27,29 +30,36 @@ class HomeViewModel(
     private val filterCityMutableStateFlow = MutableStateFlow(CityFilter.ALL_CITIES)
     val filterCityState: StateFlow<CityFilter> = filterCityMutableStateFlow
 
+    private val triggerFlow = MutableStateFlow(false)
+    
     fun getData(){
         viewModelScope.launch {
-            delay(1000)
-            val newCities = getCitiesUseCase.getCities()
-            citiesMutableStateFlow.emit(CityState.Success(newCities))
+            triggerFlow.flatMapLatest {
+                getCitiesUseCase.getCities()
+            }.collect { cityList ->
+                citiesMutableStateFlow.emit(CityState.Success(cityList))
+            }
         }
     }
 
     fun addCity (city: City) {
-        addCityUseCase.addCity(city)
-        getData()
+        viewModelScope.launch {
+            addCityUseCase.addCity(city)
+        }
     }
     
     fun setFilter (cityFilter: CityFilter){
-        setFilterUseCase.setFilter(cityFilter)
-        getData()
-        getFilter()
+        viewModelScope.launch {
+            setFilterUseCase.setFilter(cityFilter)
+            triggerFlow.value = !triggerFlow.value
+        }
     }
     
     fun getFilter () {
         viewModelScope.launch {
-            val filter = getFilterUseCase.getFilter()
-            filterCityMutableStateFlow.emit(filter)
+            getFilterUseCase.getFilter().collect { filter ->
+                filterCityMutableStateFlow.emit(filter)
+            }
         }
     }
 

@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:padding="8dp"
+    android:minWidth="480dp"
+    android:minHeight="480dp"
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
-        android:text="@string/add_city" />
+        android:text="@string/add_city"/>
 
     <EditText
         android:id="@+id/nameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/name" />
+        android:hint="@string/name"/>
 
     <EditText
         android:id="@+id/descriptionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/description" />
+        android:hint="@string/description"/>
 
     <EditText
         android:id="@+id/sunshineHoursEditText"
         android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/sunshineHours" />
-
+        android:hint="@string/sunshineHours"/>
 
     <Button
         android:id="@+id/saveButton"
-        android:text="@string/save"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        android:text="@string/save"/>
 </LinearLayout>

@@ -1,47 +1,107 @@
 package es.usj.mastertsa.jchueca.cities.data.repository
 
+import android.content.ContentValues
 import android.content.Context
-import android.content.SharedPreferences
+import android.provider.BaseColumns
+import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import es.usj.mastertsa.jchueca.cities.data.repository.CityFilterKey.cityFilterKey
+import es.usj.mastertsa.jchueca.cities.data.repository.CityFilterKey.timestamp
+import es.usj.mastertsa.jchueca.cities.data.repository.api.CityService
+import es.usj.mastertsa.jchueca.cities.data.repository.room.CityDao
+import es.usj.mastertsa.jchueca.cities.data.repository.slite.CityContract.CityEntity.COLUMN_DESCRIPTION
+import es.usj.mastertsa.jchueca.cities.data.repository.slite.CityContract.CityEntity.COLUMN_NAME
+import es.usj.mastertsa.jchueca.cities.data.repository.slite.CityContract.CityEntity.COLUMN_SUNSHINE_HOURS
+import es.usj.mastertsa.jchueca.cities.data.repository.slite.CityContract.CityEntity.TABLE_NAME
+import es.usj.mastertsa.jchueca.cities.data.repository.slite.CitySqliteHelper
 import es.usj.mastertsa.jchueca.cities.domain.model.City
 import es.usj.mastertsa.jchueca.cities.domain.model.CityFilter
 import es.usj.mastertsa.jchueca.cities.domain.repository.CityRepository
 import es.usj.mastertsa.jchueca.cities.presentation.viewmodel.CityState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlin.concurrent.thread
 
 const val CITIES_PREFERENCE = "CitiesPreference"
 const val CITY_FILTER_KEY = "CityFilterKey"
+const val TIMESTAMP = "timestamp"
+const val FIVE_DAYS = 432000000
 
-class CityRepositoryImpl(private val sharedPreferences: SharedPreferences): CityRepository {
+const val CITY_DATA_STORE = "CITY_DATA_STORE"
 
-    private val cities = getFakeData()
+val Context.dataStore by preferencesDataStore(
+    name = CITY_DATA_STORE
+)
 
-    override fun getCities(): List<City> {
+object CityFilterKey{
+    val cityFilterKey = stringPreferencesKey(CITY_FILTER_KEY)
+    val timestamp = longPreferencesKey(TIMESTAMP)
+}
 
-        val newCities = mutableListOf<City>()
-        newCities.addAll(cities)
-        return newCities
-    }
+class CityRepositoryImpl(
+    private val dataStore: DataStore<Preferences>,
+    private val citySqliteHelper: CitySqliteHelper,
+    private val cityService: CityService,
+    private val cityDao: CityDao
+    ): CityRepository {
 
-    override fun addCity(city: City) {
-        cities.add(city)
-    }
-    
-    override fun setFilter(cityFilter: CityFilter) {
+    private val db = citySqliteHelper.writableDatabase
+
+    override suspend fun getCities(): Flow<List<City>> {
         
-        sharedPreferences.edit().putString(CITY_FILTER_KEY, cityFilter.name).apply()
+        if(shouldRefresh()){
+            cityService.getCities().forEach { cityApiModel ->
+                val city = CityMapper.mapCityFromApiToDomain(cityApiModel)
+                addCity(city)
+            }
+    
+            dataStore.edit { mutablePreferences ->
+                mutablePreferences[timestamp] = System.currentTimeMillis()
+            }
+        }
+        
+        return cityDao.getCities().map { cityList ->
+            cityList.map { city ->
+                CityMapper.mapCityFromDbToDomain(city)
+            }
+        
+        }
+    }
+
+    override suspend fun addCity(city: City) {
+        val cityToAdd = CityMapper.mapCityFromDomainToDb(city)
+        cityDao.insertCity(cityToAdd)
         
     }
     
-    override fun getCityFilter(): CityFilter {
-        val filter = sharedPreferences.getString(CITY_FILTER_KEY, CityFilter.ALL_CITIES.name) ?: CityFilter.ALL_CITIES.name
-        return CityFilter.valueOf(filter)
+    override suspend fun setCityFilter(cityFilter: CityFilter) {
+        
+        dataStore.edit { preferences ->
+            preferences[cityFilterKey] = cityFilter.name
+        }
+        
     }
     
-    private fun getFakeData(): MutableList<City> {
-        val cities = mutableListOf<City>()
-        cities.add(City(1, "Zaragoza", "Zaragoza es una ciudad y un municipio de España, capital de la provincia homónima y de la comunidad autónoma de Aragón. ", 2690))
-        cities.add(City(2, "Londres", "Londres es la capital y mayor ciudad de Inglaterra y del Reino Unido.",1410))
-        cities.add(City(3, "Berlín", "Berlín es la capital de Alemania y uno de los dieciséis estados federados alemanes. ",1625))
-        cities.add(City(4, "Santo Domingo", "Santo Domingo (oficialmente llamada Santo Domingo de Guzmán) es la capital y ciudad más poblada de la República Dominicana.",2316))
-        return cities
+    override suspend fun getCityFilter(): Flow<CityFilter> {
+        return dataStore.data.map { preferences ->
+            val filter = preferences[cityFilterKey] ?: CityFilter.ALL_CITIES.name
+            CityFilter.valueOf(filter)
+        }
     }
+    
+    private suspend fun shouldRefresh(): Boolean{
+        val timestamp = dataStore.data.map { preference ->
+            preference[timestamp] ?: 0
+        }.first()
+        
+        return System.currentTimeMillis() - timestamp > FIVE_DAYS
+    }
+    
+    
 }

@@ -2,14 +2,15 @@ package es.usj.mastertsa.jchueca.cities.domain.repository
 
 import es.usj.mastertsa.jchueca.cities.domain.model.City
 import es.usj.mastertsa.jchueca.cities.domain.model.CityFilter
+import kotlinx.coroutines.flow.Flow
 
 interface CityRepository {
 
-    fun getCities(): List<City>
+    suspend fun getCities(): Flow<List<City>>
 
-    fun addCity(city: City)
+    suspend fun addCity(city: City)
     
-    fun setFilter(cityFilter: CityFilter)
+    suspend fun setCityFilter(cityFilter: CityFilter)
     
-    fun getCityFilter (): CityFilter
+    suspend fun getCityFilter (): Flow<CityFilter>
 }
