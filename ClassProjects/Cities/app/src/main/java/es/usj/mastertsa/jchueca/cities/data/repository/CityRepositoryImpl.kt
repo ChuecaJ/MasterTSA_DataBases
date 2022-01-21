@@ -1,9 +1,6 @@
 package es.usj.mastertsa.jchueca.cities.data.repository
 
-import android.content.ContentValues
 import android.content.Context
-import android.provider.BaseColumns
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -14,19 +11,14 @@ import es.usj.mastertsa.jchueca.cities.data.repository.CityFilterKey.cityFilterK
 import es.usj.mastertsa.jchueca.cities.data.repository.CityFilterKey.timestamp
 import es.usj.mastertsa.jchueca.cities.data.repository.api.CityService
 import es.usj.mastertsa.jchueca.cities.data.repository.room.CityDao
-import es.usj.mastertsa.jchueca.cities.data.repository.slite.CityContract.CityEntity.COLUMN_DESCRIPTION
-import es.usj.mastertsa.jchueca.cities.data.repository.slite.CityContract.CityEntity.COLUMN_NAME
-import es.usj.mastertsa.jchueca.cities.data.repository.slite.CityContract.CityEntity.COLUMN_SUNSHINE_HOURS
-import es.usj.mastertsa.jchueca.cities.data.repository.slite.CityContract.CityEntity.TABLE_NAME
-import es.usj.mastertsa.jchueca.cities.data.repository.slite.CitySqliteHelper
 import es.usj.mastertsa.jchueca.cities.domain.model.City
+import es.usj.mastertsa.jchueca.cities.domain.model.CityAndSights
 import es.usj.mastertsa.jchueca.cities.domain.model.CityFilter
+import es.usj.mastertsa.jchueca.cities.domain.model.Sight
 import es.usj.mastertsa.jchueca.cities.domain.repository.CityRepository
-import es.usj.mastertsa.jchueca.cities.presentation.viewmodel.CityState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlin.concurrent.thread
 
 const val CITIES_PREFERENCE = "CitiesPreference"
 const val CITY_FILTER_KEY = "CityFilterKey"
@@ -46,12 +38,10 @@ object CityFilterKey{
 
 class CityRepositoryImpl(
     private val dataStore: DataStore<Preferences>,
-    private val citySqliteHelper: CitySqliteHelper,
     private val cityService: CityService,
     private val cityDao: CityDao
     ): CityRepository {
 
-    private val db = citySqliteHelper.writableDatabase
 
     override suspend fun getCities(): Flow<List<City>> {
         
@@ -59,6 +49,10 @@ class CityRepositoryImpl(
             cityService.getCities().forEach { cityApiModel ->
                 val city = CityMapper.mapCityFromApiToDomain(cityApiModel)
                 addCity(city)
+                cityApiModel.sights.forEach { sightApiModel ->
+                    val sight = CityMapper.mapSightFromApiToDomain(sightApiModel)
+                    addSight(sight)
+                }
             }
     
             dataStore.edit { mutablePreferences ->
@@ -95,6 +89,19 @@ class CityRepositoryImpl(
         }
     }
     
+    override suspend fun addSight(sight: Sight) {
+        val sightToAdd = CityMapper.mapSightFromDomainToDb(sight)
+        cityDao.insertSight(sightToAdd)
+    }
+    
+    override suspend fun getCityAndSights(cityId: Int): Flow<CityAndSights> {
+        return cityDao.getCityAndSights(cityId).map { cityAndSights ->
+            CityMapper.mapCityAndSightsFromDbToDomain(cityAndSights)
+        }
+    
+        
+    }
+    
     private suspend fun shouldRefresh(): Boolean{
         val timestamp = dataStore.data.map { preference ->
             preference[timestamp] ?: 0
@@ -102,6 +109,5 @@ class CityRepositoryImpl(
         
         return System.currentTimeMillis() - timestamp > FIVE_DAYS
     }
-    
     
 }

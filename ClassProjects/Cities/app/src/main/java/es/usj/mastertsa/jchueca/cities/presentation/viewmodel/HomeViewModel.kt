@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import es.usj.mastertsa.jchueca.cities.domain.model.City
 import es.usj.mastertsa.jchueca.cities.domain.model.CityFilter
-import es.usj.mastertsa.jchueca.cities.domain.usecases.AddCityUseCase
-import es.usj.mastertsa.jchueca.cities.domain.usecases.GetCitiesUseCase
-import es.usj.mastertsa.jchueca.cities.domain.usecases.GetFilterUseCase
-import es.usj.mastertsa.jchueca.cities.domain.usecases.SetFilterUseCase
+import es.usj.mastertsa.jchueca.cities.domain.usecases.*
 import es.usj.mastertsa.jchueca.cities.presentation.viewmodel.CityState.Loading
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -21,7 +18,7 @@ class HomeViewModel(
     val addCityUseCase: AddCityUseCase,
     val getCitiesUseCase: GetCitiesUseCase,
     val setFilterUseCase: SetFilterUseCase,
-    val getFilterUseCase: GetFilterUseCase
+    val getFilterUseCase: GetFilterUseCase,
 ): ViewModel() {
 
     private val citiesMutableStateFlow = MutableStateFlow<CityState>(Loading)
@@ -62,5 +59,6 @@ class HomeViewModel(
             }
         }
     }
+    
 
 }

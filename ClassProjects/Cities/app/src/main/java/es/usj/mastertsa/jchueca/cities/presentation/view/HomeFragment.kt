@@ -22,7 +22,7 @@ import es.usj.mastertsa.jchueca.cities.presentation.viewmodel.HomeViewModelFacto
 import kotlinx.coroutines.flow.collect
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), OnClickListenerCityDetail {
 
     var _binding: FragmentHomeBinding? = null
     val binding: FragmentHomeBinding get() = _binding!!
@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
         HomeViewModelFactory(requireContext())
     }
 
-    val citiesAdapter = CitiesAdapter()
+    val citiesAdapter = CitiesAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +84,7 @@ class HomeFragment : Fragment() {
             adapter = citiesAdapter
             layoutManager = LinearLayoutManager(context)
         }
+        
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             homeViewModel.citiesStateFlow.collect { cityState: CityState ->
                 setState(cityState)
@@ -146,5 +147,12 @@ class HomeFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = HomeFragment()
+    }
+    
+    override fun onClick(cityId: Int) {
+        parentFragmentManager.beginTransaction()
+            .add(R.id.fragmentContainerView, CityDetailFragment.newInstance(cityId))
+            .addToBackStack(null)
+            .commit()
     }
 }

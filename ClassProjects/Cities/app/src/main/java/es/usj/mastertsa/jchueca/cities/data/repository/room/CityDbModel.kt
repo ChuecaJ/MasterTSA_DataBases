@@ -1,11 +1,9 @@
 package es.usj.mastertsa.jchueca.cities.data.repository.room
 
-import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import es.usj.mastertsa.jchueca.cities.data.repository.slite.CityContract.CityEntity.TABLE_NAME
 
-@Entity(tableName = TABLE_NAME)
+@Entity(tableName = TABLE_NAME_CITIES)
 data class CityDbModel (
     @PrimaryKey
     val id: Int,
