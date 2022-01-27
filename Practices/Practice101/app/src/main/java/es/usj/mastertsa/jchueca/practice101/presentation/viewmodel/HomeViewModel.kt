@@ -33,6 +33,7 @@ class HomeViewModel(
     }
     fun updateData(practiceData: PracticeData) {
         updatePracticeData.updatePracticeData(practiceData)
+        getData()
     }
     fun deleteData() {
         deletePracticeData.deletePracticeData()

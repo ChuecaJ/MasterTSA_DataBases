@@ -7,9 +7,10 @@ import android.content.SharedPreferences
 private const val PRACTICE_DATA_SHARED_PREF = "practice_data_shared_pref"
 private const val PRACTICE_DATA_KEY = "practice_data_key"
 
-class PracticeDataSharedPreferences(private val context: Context) {
+class PracticeDataSharedPreferences(context: Context) {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(PRACTICE_DATA_SHARED_PREF, MODE_PRIVATE)
+    
     fun getPrefData(): String {
         return sharedPreferences.getString(PRACTICE_DATA_KEY, "")!!
     }
