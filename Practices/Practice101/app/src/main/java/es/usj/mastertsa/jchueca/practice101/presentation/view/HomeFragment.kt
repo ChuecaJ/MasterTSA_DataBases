@@ -44,18 +44,6 @@ class HomeFragment : Fragment() {
         setButtons()
     }
     
-    private fun setButtons() {
-        binding.addDataButton.setOnClickListener {
-            addData()
-        }
-        binding.deleteDataButton.setOnClickListener {
-            deleteData()
-        }
-        binding.updateDataButton.setOnClickListener {
-            updateData()
-        }
-    }
-    
     private fun setState(homeState: HomeState) {
         when (homeState) {
             is HomeState.Failure -> {
@@ -67,6 +55,18 @@ class HomeFragment : Fragment() {
                 binding.loadingProgressBar.isVisible = false
                 binding.homeTextView.text = homeState.practiceData.name
             }
+        }
+    }
+    
+    private fun setButtons() {
+        binding.addDataButton.setOnClickListener {
+            addData()
+        }
+        binding.deleteDataButton.setOnClickListener {
+            deleteData()
+        }
+        binding.updateDataButton.setOnClickListener {
+            updateData()
         }
     }
     

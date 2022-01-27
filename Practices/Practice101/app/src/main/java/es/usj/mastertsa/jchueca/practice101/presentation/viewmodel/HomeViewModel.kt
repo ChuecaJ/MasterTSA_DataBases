@@ -7,9 +7,9 @@ import es.usj.mastertsa.jchueca.practice101.domain.usecases.AddPracticeData
 import es.usj.mastertsa.jchueca.practice101.domain.usecases.DeletePracticeData
 import es.usj.mastertsa.jchueca.practice101.domain.usecases.GetPracticeData
 import es.usj.mastertsa.jchueca.practice101.domain.usecases.UpdatePracticeData
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -18,24 +18,35 @@ class HomeViewModel(
     private val updatePracticeData: UpdatePracticeData,
     private val deletePracticeData: DeletePracticeData
 ) : ViewModel() {
-    private val practiceMutableStateFlow: MutableStateFlow<HomeState> =
-        MutableStateFlow(HomeState.Loading)
+    
+    private val practiceMutableStateFlow: MutableStateFlow<HomeState> = MutableStateFlow(HomeState.Loading)
     val practiceStateFlow: StateFlow<HomeState> = practiceMutableStateFlow
+    
     fun getData() {
         viewModelScope.launch {
-            delay(3000) //Simulating network request
-            val practiceData = getPracticeData.getPracticeData()
-            practiceMutableStateFlow.emit(HomeState.Success(practiceData))
+            practiceMutableStateFlow.emit(HomeState.Loading)
+            getPracticeData.getPracticeData().collect { practiceData ->
+                practiceMutableStateFlow.emit(HomeState.Success(practiceData))
+            }
         }
     }
+    
     fun addData(practiceData: PracticeData) {
-        addPracticeData.addPracticeData(practiceData)
+        viewModelScope.launch {
+            addPracticeData.addPracticeData(practiceData)
+        }
     }
+    
     fun updateData(practiceData: PracticeData) {
-        updatePracticeData.updatePracticeData(practiceData)
-        getData()
+        viewModelScope.launch {
+            updatePracticeData.updatePracticeData(practiceData)
+        }
     }
+    
     fun deleteData() {
-        deletePracticeData.deletePracticeData()
+        viewModelScope.launch {
+            deletePracticeData.deletePracticeData()
+        }
     }
 }
+
