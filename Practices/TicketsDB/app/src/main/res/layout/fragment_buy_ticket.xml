@@ -15,7 +15,7 @@
         android:text="@string/event_name"/>
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/buyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/buy_ticket"/>
