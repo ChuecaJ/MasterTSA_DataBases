@@ -1,4 +1,3 @@
 package es.usj.mastertsa.jveron.ticketsdb.domain.model
 
-class UserAndEvents {
-}
+data class UserAndEvents (val user: User, val events: List<Event>)
