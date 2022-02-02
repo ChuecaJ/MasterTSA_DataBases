@@ -1,4 +1,4 @@
 package es.usj.mastertsa.jveron.ticketsdb.presentation.view
 
-class ProfileFragment {
+class LogInFragment {
 }
