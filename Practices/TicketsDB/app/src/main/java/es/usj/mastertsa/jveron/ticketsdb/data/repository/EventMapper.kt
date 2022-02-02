@@ -14,7 +14,7 @@ object EventMapper {
         )
     }
     
-    fun mapSightFromDbToDomain(eventDbModel: EventDbModel): Event {
+    fun mapEventFromDbToDomain(eventDbModel: EventDbModel): Event {
         return Event(
             id = eventDbModel.event_id,
             price = eventDbModel.price,
@@ -23,7 +23,7 @@ object EventMapper {
         )
     }
     
-    fun mapSightFromDomainToDb (event: Event): EventDbModel {
+    fun mapEventFromDomainToDb (event: Event): EventDbModel {
         return EventDbModel(
             event_id = event.id,
             price = event.price,

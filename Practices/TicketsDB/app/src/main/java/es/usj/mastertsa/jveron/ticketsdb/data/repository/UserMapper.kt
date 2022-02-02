@@ -15,7 +15,7 @@ object UserMapper {
     //     )
     // }
     
-    fun mapSightFromDbToDomain(userDbModel: UserDbModel): User {
+    fun mapUserFromDbToDomain(userDbModel: UserDbModel): User {
         return User(
             id = userDbModel.user_id,
             email = userDbModel.email,
@@ -24,7 +24,7 @@ object UserMapper {
         )
     }
     
-    fun mapSightFromDomainToDb (user: User): UserDbModel {
+    fun mapUserFromDomainToDb (user: User): UserDbModel {
         return UserDbModel(
             user_id = user.id,
             email = user.email,
