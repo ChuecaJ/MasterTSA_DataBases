@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TicketsDB</string>
+    <string name="buy_ticket">But ticket</string>
+    <string name="event_name">Event Name</string>
 </resources>
