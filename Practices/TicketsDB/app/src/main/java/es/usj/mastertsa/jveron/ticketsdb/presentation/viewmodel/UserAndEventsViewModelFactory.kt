@@ -7,16 +7,17 @@ import es.usj.mastertsa.jveron.ticketsdb.data.repository.TicketsRepositoryImpl
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.api.EventsService
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.dataStore
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.room.TicketsDatabase
+import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 import es.usj.mastertsa.jveron.ticketsdb.domain.usecases.UseCases
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class UserAndEventsViewModelFactory (private val context: Context, private val userId: Int) : ViewModelProvider.Factory {
+class UserAndEventsViewModelFactory (private val context: Context, private val user: User) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val ticketsDao = TicketsDatabase.getDatabase(context).getDao()
         val repository = TicketsRepositoryImpl(context.dataStore, createService(), ticketsDao)
         val useCases = UseCases(repository)
-        return UserAndEventsViewModel(userId, useCases) as T
+        return UserAndEventsViewModel(user, useCases) as T
     }
 
     private fun createService(): EventsService {

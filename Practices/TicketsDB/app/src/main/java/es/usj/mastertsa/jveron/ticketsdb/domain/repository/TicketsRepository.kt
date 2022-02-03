@@ -11,7 +11,7 @@ interface TicketsRepository {
     
     suspend fun getEvents(): Flow<List<Event>>
 
-    suspend fun getUserWithEvents(userId: Int): UserWithEvents
+    suspend fun getUserWithEvents(userEmail: String): UserWithEvents
 
     suspend fun getUser(email: String): Flow<User>
 

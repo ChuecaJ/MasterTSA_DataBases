@@ -4,7 +4,7 @@ import retrofit2.http.GET
 
 interface EventsService {
 
-    @GET("events")
+    @GET("TSADB")
     suspend fun getEvents() : List<EventApiModel>
 
 }

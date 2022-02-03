@@ -1,10 +1,11 @@
 package es.usj.mastertsa.jveron.ticketsdb.presentation.view
 
 import androidx.fragment.app.Fragment
+import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 
-class UserAndEventsFragment(val userId: Int) : Fragment() {
+class UserAndEventsFragment(val user: User) : Fragment() {
 
     companion object {
-        fun newInstance(userId: Int) = UserAndEventsFragment(userId)
+        fun newInstance(user: User) = UserAndEventsFragment(user)
     }
 }

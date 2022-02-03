@@ -9,12 +9,10 @@ import javax.crypto.spec.PBEKeySpec
 import kotlin.random.Random
 
 object UserMapper {
-    
-    
+
     fun mapUserFromDbToDomain(userDbModel: UserDbModel): User {
         return User(
-            id = userDbModel.user_id,
-            email = userDbModel.email,
+            email = userDbModel.user_email,
             password = userDbModel.password,
             name = userDbModel.name
         )
@@ -22,8 +20,7 @@ object UserMapper {
     
     fun mapUserFromDomainToDb (user: User): UserDbModel {
         return UserDbModel(
-            user_id = user.id,
-            email = user.email,
+            user_email = user.email,
             password = user.password,
             name = user.name
         )

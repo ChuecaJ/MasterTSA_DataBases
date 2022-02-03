@@ -33,7 +33,26 @@ class HomeViewModel(val useCases: UseCases): ViewModel() {
     }
 
     fun addUserAndEvent(user: User, event: Event) {
-        // TODO
+        viewModelScope.launch {
+            useCases.addUserAndEvent(user = user, event = event)
+        }
+    }
+
+    fun getUser(email: String) {
+        viewModelScope.launch {
+            triggerFlow.flatMapLatest {
+                useCases.getUser(email)
+            }
+                .collect { eventsList ->
+                    userMutableStateFlow.emit(UserState.Success(eventsList))
+                }
+        }
+    }
+
+    fun addUser(user: User) {
+        viewModelScope.launch {
+            useCases.addUser(user = user)
+        }
     }
 
 }

@@ -10,8 +10,8 @@ object UserAndEventMapper {
     
     fun mapFromDomainToDb (user: User, event: Event): UserEventCrossRefDbModel {
         return UserEventCrossRefDbModel(
-            userId = user.id,
-            eventId = event.id
+            user_email = user.email,
+            event_id = event.id
         )
     }
 }

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [UserDbModel::class, EventDbModel::class], version = 1, exportSchema = true)
+@Database(entities = [UserDbModel::class, EventDbModel::class, UserEventCrossRefDbModel::class], version = 1, exportSchema = true)
 abstract class TicketsDatabase: RoomDatabase() {
     
     abstract fun getDao(): TicketsDao

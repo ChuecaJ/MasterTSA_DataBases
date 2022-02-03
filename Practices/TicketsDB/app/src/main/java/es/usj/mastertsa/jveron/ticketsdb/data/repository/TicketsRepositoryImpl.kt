@@ -63,10 +63,10 @@ class TicketsRepositoryImpl(
             }
         }
     }
+
+    override suspend fun getUserWithEvents(userEmail: String): UserWithEvents {
     
-    override suspend fun getUserWithEvents(userId: Int): UserWithEvents {
-    
-        val userAndEvents = TicketsDao.getUserAndEvents(userId)
+        val userAndEvents = TicketsDao.getUserAndEvents(userEmail)
         val user = UserMapper.mapUserFromDbToDomain(userAndEvents.user)
         val events = userAndEvents.events.map { eventDb ->
             EventMapper.mapEventFromDbToDomain(eventDb)

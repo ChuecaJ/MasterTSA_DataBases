@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">TicketsDB</string>
-    <string name="buy_ticket">But ticket</string>
+    <string name="buy_ticket">Buy ticket</string>
     <string name="event_name">Event Name</string>
+    <string name="event_description">Event Description</string>
+    <string name="log_in">Log In</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="user_name">User Name</string>
+    <string name="sign_up">Sign Up</string>
 </resources>

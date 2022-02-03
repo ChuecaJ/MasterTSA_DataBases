@@ -7,8 +7,8 @@ import androidx.room.Relation
 data class EventWithUsersDbModel(
     @Embedded val event: EventDbModel,
     @Relation(
-        parentColumn = "eventId",
-        entityColumn = "userId",
+        parentColumn = "event_id",
+        entityColumn = "user_email",
         associateBy = Junction(UserEventCrossRefDbModel::class)
     )
     val users: List<UserDbModel>

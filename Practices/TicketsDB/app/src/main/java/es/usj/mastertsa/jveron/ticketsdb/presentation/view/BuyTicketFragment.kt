@@ -13,7 +13,7 @@ import es.usj.mastertsa.jveron.ticketsdb.domain.model.UserAndEvent
 
 const val BUY_TICKET_TAG = "BuyTicketTag"
 const val BUY_TICKET_REQUEST_KEY = "BuyTicketRequestKey"
-const val EVENT_KEY = "EventKey"
+const val BUY_TICKET_KEY = "BuyTicketKey"
 
 class BuyTicketFragment (val user: User, val event: Event): DialogFragment() {
 
@@ -32,10 +32,13 @@ class BuyTicketFragment (val user: User, val event: Event): DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvEventName.text = event.name
+        binding.tvEventDescription.text = event.description
+
         binding.buyButton.setOnClickListener {
             val event = getData()
             val bundle = Bundle()
-            bundle.putParcelable(EVENT_KEY, event)
+            bundle.putParcelable(BUY_TICKET_KEY, event)
             setFragmentResult(BUY_TICKET_REQUEST_KEY, bundle)
             dismiss()
         }

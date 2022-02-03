@@ -2,8 +2,10 @@ package es.usj.mastertsa.jveron.ticketsdb.data.repository.room
 
 import androidx.room.Entity
 
-@Entity(primaryKeys = ["id", "eventId"])
+const val CROSS_TABLE_NAME = "cross"
+
+@Entity(tableName = CROSS_TABLE_NAME, primaryKeys = ["user_email", "event_id"])
 data class UserEventCrossRefDbModel (
-    val userId: Int,
-    val eventId: Int
+    val user_email: String,
+    val event_id: Int
 )

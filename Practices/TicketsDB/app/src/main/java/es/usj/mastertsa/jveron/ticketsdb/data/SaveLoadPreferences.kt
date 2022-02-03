@@ -5,10 +5,12 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 
+val NO_USER = User("noEmail", "noPassword", "noName")
+
 object SaveLoadPreferences {
     
     private const val FILE_NAME = "TicketsDB_App"
-    
+
     public fun save (activity: AppCompatActivity, user: User) {
         
         val sp: SharedPreferences = activity.getSharedPreferences(
@@ -17,10 +19,6 @@ object SaveLoadPreferences {
         )
         
         val editor = sp.edit()
-        editor.putString(
-            "id",
-            user.id.toString()
-        )
         editor.putString(
             "email",
             user.email
@@ -37,20 +35,24 @@ object SaveLoadPreferences {
         editor.apply()
     }
     
-    public fun load (activity : AppCompatActivity) : User {
+    public fun load (activity : AppCompatActivity) : User? {
         
         val sp: SharedPreferences = activity.getSharedPreferences(
             FILE_NAME,
             Context.MODE_PRIVATE
         )
-        
-        val id = sp.getString("id", "-1")!!.toInt()
-        val email = sp.getString("email", "noEmail")!!
-        val password = sp.getString("password", "noPassword")!!
-        val name = sp.getString("name", "noName")!!
-        
+
+        val email = sp.getString("email", NO_USER.email)!!
+        val password = sp.getString("password", NO_USER.password)!!
+        val name = sp.getString("name", NO_USER.name)!!
+
+        if (email == NO_USER.email ||
+            password == NO_USER.password ||
+            name == NO_USER.name) {
+            return null
+        }
+
         return User(
-            id = id,
             email = email,
             password = password,
             name = name

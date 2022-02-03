@@ -7,17 +7,13 @@ import es.usj.mastertsa.jveron.ticketsdb.domain.repository.TicketsRepository
 import kotlinx.coroutines.flow.Flow
 
 class UseCases (private val ticketsRepository: TicketsRepository){
-    
-    suspend fun addEvent(event: Event) {
-        ticketsRepository.addEvent(event)
-    }
-    
+
     suspend fun getEvents(): Flow<List<Event>> {
         return ticketsRepository.getEvents()
     }
 
-    suspend fun getUserWithEvents(userId: Int): UserWithEvents {
-        return ticketsRepository.getUserWithEvents(userId)
+    suspend fun getUserAndEvents(userEmail: String): UserWithEvents {
+        return ticketsRepository.getUserWithEvents(userEmail)
     }
 
     suspend fun getUser(email: String): Flow<User> {
