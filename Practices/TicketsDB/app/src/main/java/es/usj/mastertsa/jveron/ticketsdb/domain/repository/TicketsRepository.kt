@@ -16,4 +16,6 @@ interface TicketsRepository {
     suspend fun getUser(email: String): User
 
     suspend fun addUser(user: User)
+    
+    suspend fun addUserAndEvent(user: User, event: Event)
 }

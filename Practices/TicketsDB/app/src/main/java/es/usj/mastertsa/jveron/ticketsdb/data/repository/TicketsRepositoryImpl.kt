@@ -84,6 +84,10 @@ class TicketsRepositoryImpl(
         TicketsDao.insertUser(userToAdd)
     }
     
+    override suspend fun addUserAndEvent(user: User, event: Event) {
+        TODO("Not yet implemented")
+    }
+    
     private suspend fun shouldRefresh(): Boolean{
         val timestamp = dataStore.data.map { preference ->
             preference[timestamp] ?: 0
