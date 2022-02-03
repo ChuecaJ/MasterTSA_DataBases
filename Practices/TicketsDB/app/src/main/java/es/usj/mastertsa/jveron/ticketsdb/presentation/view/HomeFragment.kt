@@ -149,25 +149,27 @@ class HomeFragment : Fragment(), OnClickEventListener {
                     checkLogin(userState.data)
                 }
                 else {
-                    Toast.makeText(context, "This user already exists!", Toast.LENGTH_SHORT).show()
+                    if (userState.data == NO_USER) {
+                        // SIGN UP
+                        Toast.makeText(context, "Signed Up and Logged In", Toast.LENGTH_SHORT).show()
+                        homeViewModel.addUser(this.checkingSignUpUser!!)
+                        this.user = this.checkingSignUpUser
+                        SaveLoadPreferences.save(activity as AppCompatActivity, this.user!!)
+                        this.checkingUser = this.user
+                        this.checkingSignUpUser = null
+                    }
+                    else {
+                        Toast.makeText(context, "This user already exists!", Toast.LENGTH_SHORT).show()
 
-                    checkLoggedIn()
+                        checkLoggedIn()
+                    }
                 }
             }
             is UserState.Failure -> {
-                if (this.checkingSignUpUser != null) {
-                    Toast.makeText(context, "Signed Up and Logged In", Toast.LENGTH_SHORT).show()
-                    homeViewModel.addUser(this.checkingSignUpUser!!)
-                    this.user = this.checkingSignUpUser
-                    SaveLoadPreferences.save(activity as AppCompatActivity, this.user!!)
-                    this.checkingSignUpUser = null
-                }
-                else {
-                    Toast.makeText(context, "Wrong email or password!", Toast.LENGTH_SHORT).show()
-                    binding.progressBar.visibility = View.GONE
+                Toast.makeText(context, "Wrong email or password!", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.GONE
 
-                    checkLoggedIn()
-                }
+                checkLoggedIn()
             }
         }
     }
@@ -178,7 +180,6 @@ class HomeFragment : Fragment(), OnClickEventListener {
             Toast.makeText(context, "Logged In", Toast.LENGTH_SHORT).show()
             this.user = user
             SaveLoadPreferences.save(activity as AppCompatActivity, user)
-            this.checkingUser = null
         }
         else {
             Toast.makeText(context, "Wrong email or password!", Toast.LENGTH_SHORT).show()
