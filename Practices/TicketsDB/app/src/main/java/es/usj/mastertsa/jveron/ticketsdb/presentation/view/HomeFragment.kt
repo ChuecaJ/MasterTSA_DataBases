@@ -57,10 +57,13 @@ class HomeFragment : Fragment(), OnClickEventListener {
         binding.logoutButton.setOnClickListener {
             if (user != null) {
                 logOut()
+                checkLoggedIn()
             }
         }
 
         binding.userButton.setOnClickListener {
+            checkLoggedIn()
+
             if (user != null) {
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.fragmentContainerView, UserAndEventsFragment.newInstance(user = user!!))
@@ -105,17 +108,7 @@ class HomeFragment : Fragment(), OnClickEventListener {
             }
         }
 
-        if (user == null) {
-            val possibleUser: User? = SaveLoadPreferences.load(activity as AppCompatActivity)
-            if (possibleUser != null) {
-                this.checkingUser = possibleUser
-                homeViewModel.getUser(possibleUser.email)
-            }
-            else {
-                val logInFragment = LogInFragment()
-                logInFragment.show(childFragmentManager, LOG_IN_TAG)
-            }
-        }
+        checkLoggedIn()
 
         // Signup
         childFragmentManager.setFragmentResultListener(SIGN_UP_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
@@ -127,14 +120,25 @@ class HomeFragment : Fragment(), OnClickEventListener {
         }
     }
 
+    private fun checkLoggedIn() {
+        if (user == null) {
+            val possibleUser: User? = SaveLoadPreferences.load(activity as AppCompatActivity)
+            if (possibleUser != null) {
+                this.checkingUser = possibleUser
+                homeViewModel.getUser(possibleUser.email)
+            }
+            else {
+                val logInFragment = LogInFragment()
+                logInFragment.show(childFragmentManager, LOG_IN_TAG)
+            }
+        }
+    }
+
     private fun logOut() {
         this.user = null
         this.checkingUser = null
 
         SaveLoadPreferences.save(activity as AppCompatActivity, NO_USER)
-
-        val logInFragment = LogInFragment()
-        logInFragment.show(childFragmentManager, LOG_IN_TAG)
     }
 
     private fun checkLoginFromState(userState: UserState) {
@@ -147,8 +151,7 @@ class HomeFragment : Fragment(), OnClickEventListener {
                 else {
                     Toast.makeText(context, "This user already exists!", Toast.LENGTH_SHORT).show()
 
-                    val logInFragment = LogInFragment()
-                    logInFragment.show(childFragmentManager, LOG_IN_TAG)
+                    checkLoggedIn()
                 }
             }
             is UserState.Failure -> {
@@ -163,8 +166,7 @@ class HomeFragment : Fragment(), OnClickEventListener {
                     Toast.makeText(context, "Wrong email or password!", Toast.LENGTH_SHORT).show()
                     binding.progressBar.visibility = View.GONE
 
-                    val logInFragment = LogInFragment()
-                    logInFragment.show(childFragmentManager, LOG_IN_TAG)
+                    checkLoggedIn()
                 }
             }
         }
@@ -181,8 +183,7 @@ class HomeFragment : Fragment(), OnClickEventListener {
         else {
             Toast.makeText(context, "Wrong email or password!", Toast.LENGTH_SHORT).show()
 
-            val logInFragment = LogInFragment()
-            logInFragment.show(childFragmentManager, LOG_IN_TAG)
+            checkLoggedIn()
         }
     }
 

@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
+import es.usj.mastertsa.jveron.ticketsdb.data.NO_USER
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.EventKey.timestamp
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.api.EventsService
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.room.TicketsDao
@@ -79,7 +80,12 @@ class TicketsRepositoryImpl(
         val userDb = TicketsDao.getUser(email)
         
         return userDb.map { userDbModel ->
-            UserMapper.mapUserFromDbToDomain(userDbModel)
+            if (userDbModel == null) {
+                NO_USER
+            }
+            else {
+                UserMapper.mapUserFromDbToDomain(userDbModel)
+            }
         }
     }
     
