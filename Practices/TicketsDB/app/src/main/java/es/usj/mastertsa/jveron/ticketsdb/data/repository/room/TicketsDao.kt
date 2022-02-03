@@ -23,4 +23,7 @@ interface TicketsDao {
     @Query("SELECT * FROM $USERS_TABLE_NAME WHERE user_id = :userId")
     suspend fun getUserAndEvents(userId: Int): UserWithEventsDbModel
     
+    @Insert
+    suspend fun insertUserAndEvent(crossRefDbModel: UserEventCrossRefDbModel)
+    
 }

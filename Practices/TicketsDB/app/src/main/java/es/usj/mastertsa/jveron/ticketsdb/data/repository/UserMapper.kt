@@ -5,15 +5,6 @@ import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 
 object UserMapper {
     
-    // TODO(This needs UserApiModel)
-    // fun mapUserFromApiToDomain(userApiModel: UserApiModel) : User {
-    //     return User(
-    //         id = userApiModel.id,
-    //         email = userApiModel.price,
-    //         password = userApiModel.password,
-    //         name = userApiModel.name
-    //     )
-    // }
     
     fun mapUserFromDbToDomain(userDbModel: UserDbModel): User {
         return User(

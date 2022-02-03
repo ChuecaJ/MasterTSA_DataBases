@@ -85,7 +85,8 @@ class TicketsRepositoryImpl(
     }
     
     override suspend fun addUserAndEvent(user: User, event: Event) {
-        TODO("Not yet implemented")
+        val crossRefDbModel = UserAndEventMapper.mapFromDomainToDb(user, event)
+        TicketsDao.insertUserAndEvent(crossRefDbModel)
     }
     
     private suspend fun shouldRefresh(): Boolean{
