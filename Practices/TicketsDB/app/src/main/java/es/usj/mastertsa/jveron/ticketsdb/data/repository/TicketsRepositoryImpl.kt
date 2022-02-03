@@ -37,15 +37,18 @@ class TicketsRepositoryImpl(
     private val eventsService: EventsService,
     private val TicketsDao: TicketsDao
 ): TicketsRepository {
+    
+    override suspend fun addEvent(event: Event) {
+        val eventToAdd = EventMapper.mapEventFromDomainToDb(event)
+        TicketsDao.insertEvent(eventToAdd)
+    }
+    
     override suspend fun getEvents(): Flow<List<Event>> {
         
         if(shouldRefresh()){
             eventsService.getEvents().forEach { eventApiModel ->
-                // TODO(create addEvent() in Repository interface)
                 val event = EventMapper.mapEventFromApiToDomain(eventApiModel)
-                
-                //addEvent(event)
-    
+                addEvent(event)
             }
         
             dataStore.edit { mutablePreferences ->
@@ -74,6 +77,11 @@ class TicketsRepositoryImpl(
         
         val userDb = TicketsDao.getUser(email)
         return UserMapper.mapUserFromDbToDomain(userDb.first())
+    }
+    
+    override suspend fun addUser(user: User) {
+        val userToAdd = UserMapper.mapUserFromDomainToDb(user)
+        TicketsDao.insertUser(userToAdd)
     }
     
     private suspend fun shouldRefresh(): Boolean{
