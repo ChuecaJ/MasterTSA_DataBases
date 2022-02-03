@@ -16,11 +16,11 @@ class UseCases (private val ticketsRepository: TicketsRepository){
         return ticketsRepository.getEvents()
     }
 
-    suspend fun getUserAndEvents(userId: Int): UserWithEvents {
-        return ticketsRepository.getUserAndEvents(userId)
+    suspend fun getUserWithEvents(userId: Int): UserWithEvents {
+        return ticketsRepository.getUserWithEvents(userId)
     }
 
-    suspend fun getUser(email: String): User {
+    suspend fun getUser(email: String): Flow<User> {
         return ticketsRepository.getUser(email)
     }
     

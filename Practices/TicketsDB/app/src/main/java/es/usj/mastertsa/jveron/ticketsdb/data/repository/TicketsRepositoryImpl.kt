@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.EventKey.timestamp
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.api.EventsService
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.room.TicketsDao
+import es.usj.mastertsa.jveron.ticketsdb.data.repository.room.UserDbModel
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.Event
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.UserWithEvents
@@ -63,7 +64,7 @@ class TicketsRepositoryImpl(
         }
     }
     
-    override suspend fun getUserAndEvents(userId: Int): UserWithEvents {
+    override suspend fun getUserWithEvents(userId: Int): UserWithEvents {
     
         val userAndEvents = TicketsDao.getUserAndEvents(userId)
         val user = UserMapper.mapUserFromDbToDomain(userAndEvents.user)
@@ -73,10 +74,13 @@ class TicketsRepositoryImpl(
         return UserWithEvents(user, events)
     }
     
-    override suspend fun getUser(email: String): User {
+    override suspend fun getUser(email: String): Flow<User> {
         
         val userDb = TicketsDao.getUser(email)
-        return UserMapper.mapUserFromDbToDomain(userDb.first())
+        
+        return userDb.map { userDbModel ->
+            UserMapper.mapUserFromDbToDomain(userDbModel)
+        }
     }
     
     override suspend fun addUser(user: User) {
