@@ -11,7 +11,7 @@ import es.usj.mastertsa.jveron.ticketsdb.data.repository.api.EventsService
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.room.TicketsDao
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.Event
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
-import es.usj.mastertsa.jveron.ticketsdb.domain.model.UserAndEvents
+import es.usj.mastertsa.jveron.ticketsdb.domain.model.UserWithEvents
 import es.usj.mastertsa.jveron.ticketsdb.domain.repository.TicketsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -63,14 +63,14 @@ class TicketsRepositoryImpl(
         }
     }
     
-    override suspend fun getUserAndEvents(userId: Int): UserAndEvents {
+    override suspend fun getUserAndEvents(userId: Int): UserWithEvents {
     
         val userAndEvents = TicketsDao.getUserAndEvents(userId)
         val user = UserMapper.mapUserFromDbToDomain(userAndEvents.user)
         val events = userAndEvents.events.map { eventDb ->
             EventMapper.mapEventFromDbToDomain(eventDb)
         }
-        return UserAndEvents(user, events)
+        return UserWithEvents(user, events)
     }
     
     override suspend fun getUser(email: String): User {

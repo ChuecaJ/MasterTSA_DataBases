@@ -22,7 +22,7 @@ class UserAndEventsViewModelFactory (private val context: Context, private val u
     private fun createService(): EventsService {
         val retrofit = Retrofit
             .Builder()
-            .baseUrl("https://ace-ripsaw-338222.oa.r.appspot.com/") //TODO
+            .baseUrl("https://apijveron20.000webhostapp.com/TSADB/")
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
 
