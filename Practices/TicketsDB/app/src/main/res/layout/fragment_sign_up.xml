@@ -16,8 +16,8 @@
         android:layout_gravity="center"
         android:layout_margin="8dp"
         android:minHeight="48dp"
-        android:tooltipText="@string/user_name"
-        android:text="@string/user_name" />
+        android:tooltipText="@string/TooltipUserName"
+        android:hint="@string/user_name" />
 
     <EditText
         android:id="@+id/etEmail"
@@ -26,8 +26,8 @@
         android:layout_gravity="center"
         android:layout_margin="8dp"
         android:minHeight="48dp"
-        android:tooltipText="@string/email"
-        android:text="@string/email" />
+        android:tooltipText="@string/TooltipEmail"
+        android:hint="@string/email" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -36,8 +36,8 @@
         android:layout_gravity="center"
         android:layout_margin="8dp"
         android:minHeight="48dp"
-        android:tooltipText="@string/password"
-        android:text="@string/password" />
+        android:tooltipText="@string/TooltipPassword"
+        android:hint="@string/password" />
 
     <Button
         android:id="@+id/logInButton"
