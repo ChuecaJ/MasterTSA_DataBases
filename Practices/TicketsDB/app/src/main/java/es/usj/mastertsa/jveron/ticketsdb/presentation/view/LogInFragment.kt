@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import es.usj.mastertsa.jveron.ticketsdb.data.NO_USER
 import es.usj.mastertsa.jveron.ticketsdb.databinding.FragmentLogInBinding
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 
@@ -40,10 +42,18 @@ class LogInFragment: DialogFragment() {
 
         childFragmentManager.setFragmentResultListener(SIGN_UP_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
             val user : User? = bundle.getParcelable(SIGN_UP_KEY) as? User
-            val bundle = Bundle()
-            bundle.putParcelable(SIGN_UP_KEY, user)
-            setFragmentResult(SIGN_UP_REQUEST_KEY, bundle)
-            dismiss()
+            if (user != null &&
+                (user.name == NO_USER.name ||
+                        user.password == NO_USER.password ||
+                        user.email == NO_USER.email)) {
+                Toast.makeText(context, "Incomplete name, email, or password!", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                val bundle = Bundle()
+                bundle.putParcelable(SIGN_UP_KEY, user)
+                setFragmentResult(SIGN_UP_REQUEST_KEY, bundle)
+                dismiss()
+            }
         }
 
         binding.signUpButton.setOnClickListener {
@@ -53,8 +63,18 @@ class LogInFragment: DialogFragment() {
     }
 
     private fun getData() : User {
-        val email = binding.etEmail.text.toString()
-        val password = binding.etPassword.text.toString()
+        val rawEmail = binding.etEmail.text
+        var email: String = NO_USER.email
+        if (rawEmail != null && rawEmail.toString() != "") {
+            email = rawEmail.toString()
+        }
+
+        val rawPassword = binding.etPassword.text
+        var password: String = NO_USER.password
+        if (rawPassword != null && rawPassword.toString() != "") {
+            password = rawPassword.toString()
+        }
+
         return User(
             email = email,
             password = password,
