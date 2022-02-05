@@ -1,7 +1,6 @@
 package es.usj.mastertsa.jveron.ticketsdb.data.repository.room
 
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 
 const val USERS_TABLE_NAME = "users"
