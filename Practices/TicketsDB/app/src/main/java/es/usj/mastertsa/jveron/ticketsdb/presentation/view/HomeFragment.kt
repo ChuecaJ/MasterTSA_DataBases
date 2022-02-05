@@ -38,10 +38,6 @@ class HomeFragment : Fragment(), OnClickEventListener {
 
     val eventsAdapter = EventsAdapter(this)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,7 +65,7 @@ class HomeFragment : Fragment(), OnClickEventListener {
 
             if (user != null) {
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView, UserAndEventsFragment.newInstance(user = user!!))
+                    .replace(R.id.fragmentContainerView, ProfileFragment.newInstance(user = user!!))
                     .addToBackStack(null)
                     .commit()
             }

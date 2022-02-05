@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class UserAndEventsViewModel(
+class ProfileViewModel(
     private val user: User,
     private val useCases: UseCases
 ): ViewModel() {
@@ -16,8 +16,9 @@ class UserAndEventsViewModel(
     private val userAndEventsMutableStateFlow = MutableStateFlow<UserAndEventsState>(UserAndEventsState.Loading)
     val userAndEventsStateFlow: StateFlow<UserAndEventsState> = userAndEventsMutableStateFlow
 
-    fun getData(){
+    fun getData() {
         viewModelScope.launch {
+            userAndEventsMutableStateFlow.emit(UserAndEventsState.Loading)
             val userAndEvents = useCases.getUserAndEvents(user.email)
             userAndEventsMutableStateFlow.emit(UserAndEventsState.Success(userAndEvents))
         }
