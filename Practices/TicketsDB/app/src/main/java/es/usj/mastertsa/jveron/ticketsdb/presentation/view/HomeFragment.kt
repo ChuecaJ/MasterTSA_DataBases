@@ -17,6 +17,7 @@ import es.usj.mastertsa.jveron.ticketsdb.data.repository.UserMapper
 import es.usj.mastertsa.jveron.ticketsdb.databinding.FragmentHomeBinding
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.Event
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
+import es.usj.mastertsa.jveron.ticketsdb.domain.model.UserAndEvent
 import es.usj.mastertsa.jveron.ticketsdb.presentation.viewmodel.EventState
 import es.usj.mastertsa.jveron.ticketsdb.presentation.viewmodel.HomeViewModel
 import es.usj.mastertsa.jveron.ticketsdb.presentation.viewmodel.HomeViewModelFactory
@@ -74,11 +75,11 @@ class HomeFragment : Fragment(), OnClickEventListener {
             }
         }
 
-        // Get events
+        // Get events and selling tickets
         childFragmentManager.setFragmentResultListener(BUY_TICKET_REQUEST_KEY, viewLifecycleOwner) { _, bundle ->
-            val event : Event? = bundle.getParcelable(BUY_TICKET_KEY) as? Event
-            if (user != null && event != null) {
-                homeViewModel.addUserAndEvent(user!!, event)
+            val userAndEvent : UserAndEvent? = bundle.getParcelable(BUY_TICKET_KEY) as? UserAndEvent
+            if (userAndEvent != null) {
+                homeViewModel.addUserAndEvent(userAndEvent.user, userAndEvent.event)
             }
         }
 
