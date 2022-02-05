@@ -28,7 +28,8 @@ object UserMapper {
     
     fun saltAndHash(password: String): String{
         val salt = ByteArray(16)
-        Random.nextBytes(salt)
+        val rand = Random(password.length)
+        rand.nextBytes(salt)
         val spec: KeySpec = PBEKeySpec(password.toCharArray(), salt, 65536, 128)
         val f: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
         val hash: ByteArray = f.generateSecret(spec).encoded
