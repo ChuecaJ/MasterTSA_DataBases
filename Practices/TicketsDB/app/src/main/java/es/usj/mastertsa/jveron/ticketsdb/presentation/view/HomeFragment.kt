@@ -18,10 +18,7 @@ import es.usj.mastertsa.jveron.ticketsdb.databinding.FragmentHomeBinding
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.Event
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.UserAndEvent
-import es.usj.mastertsa.jveron.ticketsdb.presentation.viewmodel.EventState
-import es.usj.mastertsa.jveron.ticketsdb.presentation.viewmodel.HomeViewModel
-import es.usj.mastertsa.jveron.ticketsdb.presentation.viewmodel.HomeViewModelFactory
-import es.usj.mastertsa.jveron.ticketsdb.presentation.viewmodel.UserState
+import es.usj.mastertsa.jveron.ticketsdb.presentation.viewmodel.*
 import kotlinx.coroutines.flow.collect
 
 class HomeFragment : Fragment(), OnClickEventListener {
@@ -31,6 +28,8 @@ class HomeFragment : Fragment(), OnClickEventListener {
     var user: User? = null
     var checkingUser: User? = null
     var checkingSignUpUser: User? = null
+
+    var checkingEvent: Event? = null
 
     val homeViewModel : HomeViewModel by viewModels {
         HomeViewModelFactory(requireContext())
@@ -91,6 +90,13 @@ class HomeFragment : Fragment(), OnClickEventListener {
         }
 
         homeViewModel.getData()
+
+        // Get user and events for buying
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            homeViewModel.userAndEventsStateFlow.collect { userAndEventsState: UserAndEventsState ->
+                setUserAndEventsState(userAndEventsState)
+            }
+        }
 
         // Login
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -205,17 +211,35 @@ class HomeFragment : Fragment(), OnClickEventListener {
         }
     }
 
+    private fun setUserAndEventsState(userAndEventsState: UserAndEventsState) {
+        when (userAndEventsState) {
+            UserAndEventsState.Loading -> binding.progressBar.visibility = View.VISIBLE
+            is UserAndEventsState.Success -> {
+                binding.progressBar.visibility = View.GONE
+                if (checkingEvent != null){
+                    BuyTicketFragment(userWithEvents = userAndEventsState.data, event = checkingEvent!!)
+                        .show(childFragmentManager, BUY_TICKET_TAG)
+                    checkingEvent = null
+                }
+            }
+            is UserAndEventsState.Failure -> {
+                Toast.makeText(context, "Failure!", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.GONE
+            }
+        }
+    }
+
     companion object {
         fun newInstance() = HomeFragment()
     }
 
     override fun onEventClicked(event: Event) {
-        if (user == null){
-            checkLoggedIn()
+        if (user != null && user != NO_USER) {
+            homeViewModel.getUserAndEvents(user!!)
+            checkingEvent = event
         }
         else {
-            user?.let { BuyTicketFragment(user = it, event = event) }
-                ?.show(childFragmentManager, BUY_TICKET_TAG)
+            checkLoggedIn()
         }
     }
 

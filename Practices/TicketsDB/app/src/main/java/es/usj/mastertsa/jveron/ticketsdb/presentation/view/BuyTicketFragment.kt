@@ -10,12 +10,13 @@ import es.usj.mastertsa.jveron.ticketsdb.databinding.FragmentBuyTicketBinding
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.Event
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.UserAndEvent
+import es.usj.mastertsa.jveron.ticketsdb.domain.model.UserWithEvents
 
 const val BUY_TICKET_TAG = "BuyTicketTag"
 const val BUY_TICKET_REQUEST_KEY = "BuyTicketRequestKey"
 const val BUY_TICKET_KEY = "BuyTicketKey"
 
-class BuyTicketFragment (val user: User, val event: Event): DialogFragment() {
+class BuyTicketFragment (val userWithEvents: UserWithEvents, val event: Event): DialogFragment() {
 
     var _binding : FragmentBuyTicketBinding? = null
     val binding : FragmentBuyTicketBinding get() = _binding!!
@@ -36,17 +37,26 @@ class BuyTicketFragment (val user: User, val event: Event): DialogFragment() {
         binding.tvEventDescription.text = event.description
         binding.tvEventPrice.text = event.price.toString().plus(" $")
 
+        if (userWithEvents.events.contains(event)) {
+            binding.buyButton.isEnabled = false
+            binding.buyButton.text = "Already in inventory"
+        }
+        else {
+            binding.buyButton.isEnabled = true
+            binding.buyButton.text = "Buy ticket"
+        }
+
         binding.buyButton.setOnClickListener {
-            val event = getData()
+            val userAndEvent = getData()
             val bundle = Bundle()
-            bundle.putParcelable(BUY_TICKET_KEY, event)
+            bundle.putParcelable(BUY_TICKET_KEY, userAndEvent)
             setFragmentResult(BUY_TICKET_REQUEST_KEY, bundle)
             dismiss()
         }
     }
 
     private fun getData() : UserAndEvent {
-       return UserAndEvent(user = user, event = event)
+       return UserAndEvent(user = userWithEvents.user, event = event)
     }
 
 }

@@ -19,6 +19,9 @@ class HomeViewModel(val useCases: UseCases): ViewModel() {
     private val userMutableStateFlow = MutableStateFlow<UserState>(UserState.Loading)
     val usersStateFlow: StateFlow<UserState> = userMutableStateFlow
 
+    private val userAndEventsMutableStateFlow = MutableStateFlow<UserAndEventsState>(UserAndEventsState.Loading)
+    val userAndEventsStateFlow: StateFlow<UserAndEventsState> = userAndEventsMutableStateFlow
+
     private val triggerFlow = MutableStateFlow(false)
 
     fun getData() {
@@ -54,6 +57,14 @@ class HomeViewModel(val useCases: UseCases): ViewModel() {
     fun addUser(user: User) {
         viewModelScope.launch {
             useCases.addUser(user = user)
+        }
+    }
+
+    fun getUserAndEvents(user: User) {
+        viewModelScope.launch {
+            userAndEventsMutableStateFlow.emit(UserAndEventsState.Loading)
+            val userAndEvents = useCases.getUserAndEvents(user.email)
+            userAndEventsMutableStateFlow.emit(UserAndEventsState.Success(userAndEvents))
         }
     }
 
