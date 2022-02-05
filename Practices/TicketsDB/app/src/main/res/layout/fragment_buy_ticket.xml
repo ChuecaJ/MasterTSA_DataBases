@@ -24,6 +24,14 @@
         android:layout_margin="8dp"
         android:text="@string/event_description"/>
 
+    <TextView
+        android:id="@+id/tvEventPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        android:text="@string/price"/>
+
     <Button
         android:id="@+id/buyButton"
         android:layout_width="match_parent"

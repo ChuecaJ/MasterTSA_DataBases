@@ -11,4 +11,5 @@
     <string name="TooltipEmail">Fill with your email</string>
     <string name="TooltipPassword">Fill with a strong password</string>
     <string name="TooltipUserName">Fill with your full name</string>
+    <string name="price">Price</string>
 </resources>

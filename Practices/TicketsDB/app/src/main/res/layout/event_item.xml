@@ -21,14 +21,6 @@
             android:layout_gravity="center"
             tools:text = "Event Name"/>
 
-        <TextView
-            android:id="@+id/eventDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_gravity="center"
-            tools:text = "Event Description"/>
-
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

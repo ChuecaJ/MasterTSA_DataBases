@@ -24,7 +24,7 @@ class BuyTicketFragment (val user: User, val event: Event): DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentBuyTicketBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,6 +34,7 @@ class BuyTicketFragment (val user: User, val event: Event): DialogFragment() {
 
         binding.tvEventName.text = event.name
         binding.tvEventDescription.text = event.description
+        binding.tvEventPrice.text = event.price.toString().plus(" $")
 
         binding.buyButton.setOnClickListener {
             val event = getData()

@@ -20,7 +20,6 @@ class EventsAdapter (val onClickEventListener: OnClickEventListener) : ListAdapt
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val event = getItem(position)
         holder.binding.eventName.text = event.name
-        holder.binding.eventDescription.text = event.description
         holder.binding.root.setOnClickListener{ onClickEventListener.onEventClicked(event) }
     }
 }
