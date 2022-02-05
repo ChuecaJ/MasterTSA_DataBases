@@ -31,7 +31,7 @@ object UserMapper {
         Random.nextBytes(salt)
         val spec: KeySpec = PBEKeySpec(password.toCharArray(), salt, 65536, 128)
         val f: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
-        val hash: ByteArray = f.generateSecret(spec).getEncoded()
+        val hash: ByteArray = f.generateSecret(spec).encoded
         val enc: Base64.Encoder = Base64.getEncoder()
         return enc.encodeToString(hash)
     }
