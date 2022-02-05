@@ -53,6 +53,8 @@ class HomeFragment : Fragment(), OnClickEventListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.logoutButton.hide()
+
         // Buttons
         binding.logoutButton.setOnClickListener {
             if (user != null) {
@@ -137,6 +139,7 @@ class HomeFragment : Fragment(), OnClickEventListener {
     private fun logOut() {
         this.user = null
         this.checkingUser = null
+        binding.logoutButton.hide()
 
         SaveLoadPreferences.save(activity as AppCompatActivity, NO_USER)
     }
@@ -157,6 +160,7 @@ class HomeFragment : Fragment(), OnClickEventListener {
                         SaveLoadPreferences.save(activity as AppCompatActivity, this.user!!)
                         this.checkingUser = this.user
                         this.checkingSignUpUser = null
+                        binding.logoutButton.show()
                     }
                     else {
                         Toast.makeText(context, "This user already exists!", Toast.LENGTH_SHORT).show()
@@ -180,6 +184,7 @@ class HomeFragment : Fragment(), OnClickEventListener {
             Toast.makeText(context, "Logged In", Toast.LENGTH_SHORT).show()
             this.user = user
             SaveLoadPreferences.save(activity as AppCompatActivity, user)
+            binding.logoutButton.show()
         }
         else {
             Toast.makeText(context, "Wrong email or password!", Toast.LENGTH_SHORT).show()
@@ -208,8 +213,13 @@ class HomeFragment : Fragment(), OnClickEventListener {
     }
 
     override fun onEventClicked(event: Event) {
-        user?.let { BuyTicketFragment(user = it, event = event) }
-            ?.show(childFragmentManager, BUY_TICKET_TAG)
+        if (user == null){
+            checkLoggedIn()
+        }
+        else {
+            user?.let { BuyTicketFragment(user = it, event = event) }
+                ?.show(childFragmentManager, BUY_TICKET_TAG)
+        }
     }
 
 }

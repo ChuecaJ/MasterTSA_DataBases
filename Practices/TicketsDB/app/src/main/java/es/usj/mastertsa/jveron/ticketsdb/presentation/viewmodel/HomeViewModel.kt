@@ -40,6 +40,8 @@ class HomeViewModel(val useCases: UseCases): ViewModel() {
 
     fun getUser(email: String) {
         viewModelScope.launch {
+            userMutableStateFlow.emit(UserState.Loading)
+
             triggerFlow.flatMapLatest {
                 useCases.getUser(email)
             }
