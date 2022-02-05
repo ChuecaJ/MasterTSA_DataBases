@@ -10,7 +10,6 @@ import es.usj.mastertsa.jveron.ticketsdb.data.NO_USER
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.EventKey.timestamp
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.api.EventsService
 import es.usj.mastertsa.jveron.ticketsdb.data.repository.room.TicketsDao
-import es.usj.mastertsa.jveron.ticketsdb.data.repository.room.UserDbModel
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.Event
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.UserWithEvents

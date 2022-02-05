@@ -11,7 +11,7 @@ object SaveLoadPreferences {
     
     private const val FILE_NAME = "TicketsDB_App"
 
-    public fun save (activity: AppCompatActivity, user: User) {
+    fun save (activity: AppCompatActivity, user: User) {
         
         val sp: SharedPreferences = activity.getSharedPreferences(
             FILE_NAME,
@@ -35,7 +35,7 @@ object SaveLoadPreferences {
         editor.apply()
     }
     
-    public fun load (activity : AppCompatActivity) : User? {
+    fun load (activity : AppCompatActivity) : User? {
         
         val sp: SharedPreferences = activity.getSharedPreferences(
             FILE_NAME,
