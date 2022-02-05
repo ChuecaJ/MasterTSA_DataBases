@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import es.usj.mastertsa.jveron.ticketsdb.data.NO_USER
 import es.usj.mastertsa.jveron.ticketsdb.databinding.FragmentSignUpBinding
 import es.usj.mastertsa.jveron.ticketsdb.domain.model.User
 
@@ -40,9 +41,24 @@ class SignUpFragment: DialogFragment() {
     }
 
     private fun getData() : User {
-        val email = binding.etEmail.text.toString()
-        val password = binding.etPassword.text.toString()
-        val name = binding.etUserName.text.toString()
+        val rawEmail = binding.etEmail.text
+        var email: String = NO_USER.email
+        if (rawEmail != null && rawEmail.toString() != "") {
+            email = rawEmail.toString()
+        }
+
+        val rawPassword = binding.etPassword.text
+        var password: String = NO_USER.password
+        if (rawPassword != null && rawPassword.toString() != "") {
+            password = rawPassword.toString()
+        }
+
+        val rawName = binding.etUserName.text
+        var name: String = NO_USER.name
+        if (rawName != null && rawName.toString() != "") {
+            name = rawName.toString()
+        }
+
         return User(email = email,
             password = password,
             name = name)
